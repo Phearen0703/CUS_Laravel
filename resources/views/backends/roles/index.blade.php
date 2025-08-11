@@ -31,9 +31,15 @@
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->description ?? 'No Description' }}</td>
                         <td>
+                            <a class="btn btn-sm btn-success" href="{{ route('roles.permissions', $role->id) }}">
+                                <i class="fa-solid fa-key"></i> Permissions
+                            </a>
                             <a class="btn btn-sm btn-warning" href="{{ route('roles.edit', $role->id) }}">
                                 <i class="fa-solid fa-pen-to-square"></i> Edit
                             </a>
+                            <a class="btn btn-sm btn-danger"
+                                href="{{route('roles.delete', $role->id)}}"
+                                onclick="return confirm('Are you sure you want to delete this role?');"><i class="fa-solid fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                     @endforeach

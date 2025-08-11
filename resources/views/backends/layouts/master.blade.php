@@ -22,6 +22,14 @@
     <link href="{{asset('backends/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('backends/assets/css/app.min.css')}}" rel="stylesheet" type="text/css" />
     @stack('css')
+    <style>
+        .alert-error {
+            background-color: #ff8f87; /* red */
+            color: white;
+            padding: 20px;
+            border-radius: 4px;
+        }
+    </style>
 
 </head>
 
@@ -40,7 +48,7 @@
                         </button>
                     </li>
                     <li class="mx-3 welcome-text">
-                        <h3 class="mb-0 fw-bold text-truncate">Good Morning, James!</h3>
+                        <h3 class="mb-0 fw-bold text-truncate">Good Morning, {{userAuth()->name}}!</h3>
                         <!-- <h6 class="mb-0 fw-normal text-muted text-truncate fs-14">Here's your overview this week.</h6> -->
                     </li>
                 </ul>
@@ -80,16 +88,16 @@
                     <li class="dropdown topbar-item">
                         <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#"
                             role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="assets/images/users/avatar-1.jpg" alt="" class="thumb-lg rounded-circle">
+                            <img src="{{asset(userAuth()->photo)}}" alt="" class="thumb-lg rounded-circle">
                         </a>
                         <div class="dropdown-menu dropdown-menu-end py-0">
                             <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
                                 <div class="flex-shrink-0">
-                                    <img src="{{asset('backends/assets/images/users/avatar-1.jpg')}}" alt="" class="thumb-md rounded-circle">
+                                    <img src="{{asset(userAuth()->photo)}}" alt="" class="thumb-md rounded-circle">
                                 </div>
                                 <div class="flex-grow-1 ms-2 text-truncate align-self-center">
-                                    <h6 class="my-0 fw-medium text-dark fs-13">William Martin</h6>
-                                    <small class="text-muted mb-0">Front End Developer</small>
+                                    <h6 class="my-0 fw-medium text-dark fs-13">{{userAuth()->name}}</h6>
+                                    <small class="text-muted mb-0">{{userAuth()->role}}</small>
                                 </div><!--end media-body-->
                             </div>
                             <div class="dropdown-divider mt-0"></div>
@@ -106,8 +114,15 @@
                             <a class="dropdown-item" href="pages-faq.html"><i
                                     class="las la-question-circle fs-18 me-1 align-text-bottom"></i> Help Center</a>
                             <div class="dropdown-divider mb-0"></div>
-                            <a class="dropdown-item text-danger" href="auth-login.html"><i
-                                    class="las la-power-off fs-18 me-1 align-text-bottom"></i> Logout</a>
+                            <a href="#" class="dropdown-item text-danger" 
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <i class="las la-power-off fs-18 me-1 align-text-bottom"></i> Logout
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+
                         </div>
                     </li>
                 </ul><!--end topbar-nav-->
@@ -144,13 +159,25 @@
                             </small> -->
                             <span>Main Menu</span>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('home')}}" id="sidebarDashboards">
-                                <i class="iconoir-home-simple menu-icon"></i>
-                                <span>Dashboards</span>
+                        @if (auth()->user()->role_id == 1)
+                            <li class="nav-item">
+                            <a class="nav-link" href="{{route('permissions.index')}}" id="sidebarDashboards">
+                                <i class="fa-solid fa-user-check menu-icon"></i>
+                                <span>Permission</span>
                             </a>
  
                         </li><!--end nav-item-->
+                        
+                        @endif
+                       @if (checkPermission('key_dashboard', 'view'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('home')}}" id="sidebarDashboards">
+                                <i class="fa-solid fa-house menu-icon"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li><!--end nav-item-->
+                       
+                       @endif
                         <li class="nav-item">
                             <a class="nav-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarUsers">

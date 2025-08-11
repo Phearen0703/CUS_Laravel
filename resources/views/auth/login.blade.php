@@ -22,6 +22,15 @@
          <link href="{{asset('backends/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
          <link href="{{asset('backends/assets/css/app.min.css')}}" rel="stylesheet" type="text/css" />
 
+             <style>
+        .alert-error {
+            background-color: #ff8f87; /* red */
+            color: white;
+            padding: 20px;
+            border-radius: 4px;
+        }
+    </style>
+
     </head>
 
     
@@ -43,18 +52,24 @@
                                         <p class="text-muted fw-medium mb-0">Sign in to continue to Rizz.</p>  
                                     </div>
                                 </div>
-                                <div class="card-body pt-0">                                    
+                                <div class="card-body pt-2"> 
+                                        @if (session('status'))
+                                            <div class="alert alert-{{ session('status') }}">
+                                                {{ session('sms') }}
+                                            </div>
+                                        @endif                                   
                                     <form class="my-4" action="{{ route('login') }}" method="POST">
                                         @csrf            
                                         <div class="form-group mb-2">
                                             <label class="form-label" for="username">Username</label>
-                                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                            <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
 
-                                            @error('email')
+                                            @error('username')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
                                                 </span>
-                                            @enderror                               
+                                            @enderror
+                              
                                         </div><!--end form-group--> 
             
                                         <div class="form-group">

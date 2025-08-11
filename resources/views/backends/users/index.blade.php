@@ -31,7 +31,7 @@
                 <tbody>
 
                   
-                     @foreach ($data as $index => $user)
+                     @foreach ($users as $index => $user)
                       <tr>
                         <td>{{$index + 1}}</td>
                         <td>
@@ -51,8 +51,10 @@
                             @endif
                         </td>
                         <td>
-                            <a href="$">Edit</a>
-                            <a href="$">Delete</a>
+                            <a class="btn btn-sm btn-warning" href="{{route('users.edit', $user->id)}}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                            <a class="btn btn-sm btn-danger"
+                                href="{{route('users.delete', $user->id)}}"
+                                onclick="return confirm('Are you sure you want to delete this user?');"><i class="fa-solid fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                     @endforeach

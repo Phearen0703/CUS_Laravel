@@ -133,6 +133,11 @@
     <!-- Main Content -->
     <div class="container mt-4">
         <div class="row">
+            @if (session('status'))
+                <div class="alert alert-{{ session('status') }}">
+                    {{ session('sms') }}
+                </div>
+            @endif
             <!-- News Content -->
             @yield('content')
 
