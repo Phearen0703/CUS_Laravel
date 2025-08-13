@@ -99,12 +99,12 @@ class RoleController extends Controller
         }
     }
 
-    public function permissions(string $id)
+    public function permissions($id)
     {
 
         $data['role_permission'] = DB::table('permissions') // fixed table name
             ->leftJoinSub(
-                DB::table('role_permission')->where('id', $id), 't1', function ($join) {
+                DB::table('role_permission')->where('role_id', $id), 't1', function ($join) {
                     $join->on('permissions.id', '=', 't1.permission_id'); // fixed table name
                 }
             )

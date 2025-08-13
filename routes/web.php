@@ -62,6 +62,26 @@ Route::post('/permissions-update/{id}', [App\Http\Controllers\Backends\Permissio
 Route::get('/permissions-delete/{id}', [App\Http\Controllers\Backends\PermissionController::class, 'delete'])->name('permissions.delete')->middleware(IsDeveloper::class);
 
 
+//----------book routes
+Route::get('/books-list', [App\Http\Controllers\Backends\BookController::class, 'index'])->name('books.index');
+Route::get('/books-create', [App\Http\Controllers\Backends\BookController::class, 'create'])->name('books.create');
+Route::post('/books-store', [App\Http\Controllers\Backends\BookController::class, 'store'])->name('books.store');
+Route::get('/books-show/{id}', [App\Http\Controllers\Backends\BookController::class, 'show'])->name('books.show');
+Route::get('/books-edit/{id}', [App\Http\Controllers\Backends\BookController::class, 'edit'])->name('books.edit');
+Route::post('/books-update/{id}', [App\Http\Controllers\Backends\BookController::class, 'update'])->name('books.update');
+Route::get('/books-delete/{id}', [App\Http\Controllers\Backends\BookController::class, 'delete'])->name('books.delete');
+
+
+//----------category routes
+Route::get('/categorys-list', [App\Http\Controllers\Backends\CategoryController::class, 'index'])->name('categorys.index');
+Route::get('/categorys-create', [App\Http\Controllers\Backends\CategoryController::class, 'create'])->name('categorys.create');
+Route::post('/categorys-store', [App\Http\Controllers\Backends\CategoryController::class, 'store'])->name('categorys.store');
+Route::get('/categorys-show/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'show'])->name('categorys.show');
+Route::get('/categorys-edit/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'edit'])->name('categorys.edit');
+Route::post('/categorys-update/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'update'])->name('categorys.update');
+Route::get('/categorys-delete/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'delete'])->name('categorys.delete');
+
+
 
 
 //no permission

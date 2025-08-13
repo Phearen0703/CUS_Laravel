@@ -178,6 +178,59 @@
                         </li><!--end nav-item-->
                        
                        @endif
+        
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#sidebarManagement" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarManagement">
+                                <i class="fa-brands fa-windows menu-icon"></i>
+                                <span>Management</span>
+                            </a>
+                            <div class="collapse " id="sidebarManagement">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+
+                                        @if (checkPermission('key_user', 'view'))
+                                            <a href="{{route('categorys.index')}}" class="nav-link"><span>Category</span></a>
+                                        @endif
+                                        
+                                        @if (checkPermission('key_book', 'view'))
+                                            <a href="{{route('books.index')}}" class="nav-link"><span>Books</span></a>
+                                        
+                                        @endif
+                                        
+                                    </li><!--end nav-item-->
+                                    
+                                </ul><!--end nav-->
+                            </div><!--end startbarUsers-->
+                        </li><!--end nav-item-->
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#sidebarOperation" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarOperation">
+                                <i class="fa-brands fa-windows menu-icon"></i>
+                                <span>Operations</span>
+                            </a>
+                            <div class="collapse " id="sidebarOperation">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+
+                                        @if (checkPermission('key_user', 'view'))
+                                            <a href="{{route('users.index')}}" class="nav-link"><span>User</span></a>
+                                        @endif
+                                        
+                                        @if (checkPermission('key_role', 'view'))
+                                            <a href="{{route('roles.index')}}" class="nav-link"><span>Roles</span></a>
+                                        
+                                        @endif
+                                        
+                                    </li><!--end nav-item-->
+                                    
+                                </ul><!--end nav-->
+                            </div><!--end startbarUsers-->
+                        </li><!--end nav-item-->
+
                         <li class="nav-item">
                             <a class="nav-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarUsers">
@@ -188,10 +241,15 @@
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
 
-                                        <a href="{{route('users.index')}}" class="nav-link"><span>User</span></a>
-                                        <a href="{{route('roles.index')}}" class="nav-link"><span>Roles</span></a>
-
-
+                                        @if (checkPermission('key_user', 'view'))
+                                            <a href="{{route('users.index')}}" class="nav-link"><span>User</span></a>
+                                        @endif
+                                        
+                                        @if (checkPermission('key_role', 'view'))
+                                            <a href="{{route('roles.index')}}" class="nav-link"><span>Roles</span></a>
+                                        
+                                        @endif
+                                        
                                     </li><!--end nav-item-->
                                     
                                 </ul><!--end nav-->
@@ -229,11 +287,11 @@
                                     <p class="text-muted mb-0">
                                         ©
                                         <script> document.write(new Date().getFullYear()) </script>
-                                        Rizz
+                                        Library
                                         <span class="text-muted d-none d-sm-inline-block float-end">
                                             Crafted with
                                             <i class="iconoir-heart text-danger"></i>
-                                            by Mannatthemes</span>
+                                            by Phearen</span>
                                     </p>
                                 </div>
                             </div>

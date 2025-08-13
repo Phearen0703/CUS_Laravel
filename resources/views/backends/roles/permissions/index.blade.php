@@ -68,8 +68,10 @@
 
 
 <script>
-        function handlePermission(permission, role_permission_id, role_permission_value, permission_id) {
-        let url = "{{ route('roles.permissions.update',$id) }}";
+    const roleId = {{ $id }};
+    function handlePermission(permission, role_permission_id, role_permission_value, permission_id) {
+        let url = "{{ url('admin/roles') }}/" + roleId + "/permissions-update";
+
         role_permission_value = role_permission_value == 0 ? 1 : 0;
 
         url += "?permission=" + permission +
@@ -80,6 +82,7 @@
         window.location.href = url;
     }
 </script>
+
 
 
 @endpush

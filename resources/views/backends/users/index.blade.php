@@ -12,7 +12,10 @@
         </div>
     @endif
     <div class="card-body pt-0">
-        <a class="btn btn-primary" href="{{route('users.create')}}"><i class="fa-solid fa-plus"></i> Create</a>
+        @if (checkPermission('key_user', 'create'))
+            <a class="btn btn-primary" href="{{ route('users.create') }}"><i class="fa-solid fa-plus"></i> Create</a>
+        
+        @endif
         <div class="table-responsive pt-2">
             <table class="table datatable" id="datatable_1">
                 <thead class="table-light">
@@ -51,10 +54,17 @@
                             @endif
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-warning" href="{{route('users.edit', $user->id)}}"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
-                            <a class="btn btn-sm btn-danger"
-                                href="{{route('users.delete', $user->id)}}"
-                                onclick="return confirm('Are you sure you want to delete this user?');"><i class="fa-solid fa-trash"></i> Delete</a>
+                            @if (checkPermission('key_user', 'edit'))
+                                <a class="btn btn-sm btn-warning" href="{{ route('users.edit', $user->id) }}">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                            
+                            @endif
+                            @if (checkPermission('key_user', 'delete'))
+                                <a class="btn btn-sm btn-danger"
+                                    href="{{route('users.delete', $user->id)}}"
+                                    onclick="return confirm('Are you sure you want to delete this user?');"><i class="fa-solid fa-trash"></i> Delete</a>
+                            
+                            @endif
                         </td>
                     </tr>
                     @endforeach
