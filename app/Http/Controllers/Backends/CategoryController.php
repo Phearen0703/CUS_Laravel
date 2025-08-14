@@ -85,7 +85,8 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return view('backends.categorys.edit', compact('category'));
     }
 
     /**
@@ -93,14 +94,44 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->name = $request->name;
+        $category->updated_at = now();
+        $category->updated_by = auth()->id();
+
+        $updated = $category->save();
+        
+        return redirect()
+            ->route('categorys.index')
+            ->with([
+                'status' => $updated ? 'success' : 'error',
+                'sms'    => $updated ? 'Category updated successfully.' : 'Failed to update category.'
+            ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function delete(string $id)
+        {
+            $category = Category::findOrFail($id);
+            $category->deleted_by = auth()->id();
+            $category->save(); // Save deleted_by before delete
+            
+            $deleted = $category->delete(); // Soft delete
+
+            return redirect()
+                ->route('categorys.index')
+                ->with([
+                    'status' => $deleted ? 'success' : 'error',
+                    'sms'    => $deleted
+                        ? 'Category deleted successfully.'
+                        : 'Failed to delete category.'
+                ]);
+        }
+
 }

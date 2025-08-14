@@ -183,7 +183,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#sidebarManagement" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarManagement">
-                                <i class="fa-brands fa-windows menu-icon"></i>
+                                <i class="fa-solid fa-list-check menu-icon"></i>
                                 <span>Management</span>
                             </a>
                             <div class="collapse " id="sidebarManagement">

@@ -25,5 +25,13 @@ class Category extends Model
     ];
 
     public $timestamps = false;
+
+    protected static function booted()
+    {
+        static::deleting(function ($category) {
+            $category->deleted_by = auth()->id();
+            $category->saveQuietly();
+        });
+    }
    
 }
