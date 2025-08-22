@@ -61,4 +61,6 @@ class Book extends Model
     protected $dates = ['deleted_at'];
 
 
+
+
 }

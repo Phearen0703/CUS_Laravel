@@ -117,12 +117,12 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group row mb-2">
-                                    <label for="photo" class="col-lg-3 col-form-label text-end">Photo</label>
+                                    <label for="image" class="col-lg-3 col-form-label text-end">Cover</label>
                                     <div class="col-lg-9">
 
-                                        <input id="photo" name="photo" type="file"
-                                            class="form-control @error('photo') is-invalid @enderror">
-                                        @error('photo')
+                                        <input id="image" name="image" type="file"
+                                            class="form-control @error('image') is-invalid @enderror">
+                                        @error('image')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
 

@@ -96,7 +96,7 @@ Route::get('/admin.no_permission', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\Frontends\BookController::class, 'index'])->name('home');
 
 
 Route::fallback(function () {
