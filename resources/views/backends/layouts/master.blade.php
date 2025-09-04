@@ -164,7 +164,7 @@
                         @endif
                        @if (checkPermission('key_dashboard', 'view'))
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('home')}}" id="sidebarDashboards">
+                            <a class="nav-link" href="{{route('admin.home')}}" id="sidebarDashboards">
                                 <i class="fa-solid fa-house menu-icon"></i>
                                 <span>Dashboard</span>
                             </a>

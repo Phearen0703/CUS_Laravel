@@ -1,104 +1,127 @@
 <?php
 
-
-use App\Http\Middleware\IsDeveloper;
 use Illuminate\Support\Facades\Route;
-
-
-Route::middleware('auth')->group(function () {
-    // All routes in here are protected by the 'auth' middleware
-    Route::get('/roles-list', [App\Http\Controllers\Backends\RoleController::class, 'index'])->name('roles.index');
-});
-
-Route::get('/', function () {
-    return view('home');
-});
-
-
+use App\Http\Middleware\IsDeveloper;
 use App\Http\Middleware\ActiveUser;
 
+// Frontend Controllers
+use App\Http\Controllers\Frontends\BookController as FrontendBookController;
+
+// Backend Controllers
+use App\Http\Controllers\Backends\HomeController as AdminHomeController;
+use App\Http\Controllers\Backends\RoleController;
+use App\Http\Controllers\Backends\UserController;
+use App\Http\Controllers\Backends\PermissionController;
+use App\Http\Controllers\Backends\BookController as AdminBookController;
+use App\Http\Controllers\Backends\CategoryController;
+
+/*
+|--------------------------------------------------------------------------
+| Frontend Routes
+|--------------------------------------------------------------------------
+*/
+
+// Home page (all categories + books)
+Route::get('/', [FrontendBookController::class, 'index'])->name('home');
+
+// Category page (show books by category)
+Route::get('/category/{id}', [FrontendBookController::class, 'category'])->name('frontend.category.show');
+
+// Single book modal (AJAX modal)
+Route::get('/book/{id}/modal', [FrontendBookController::class, 'showModal'])->name('frontends.books.modal');
+
+
+/*
+|--------------------------------------------------------------------------
+| Backend Routes
+|--------------------------------------------------------------------------
+*/
 Route::group([
-    'namespace'  => 'App\Http\Controllers\Backends',
     'prefix'     => 'admin',
     'middleware' => [ActiveUser::class],
 ], function () {
 
-    
-    Route::get('/', 'HomeController@index')->name('admin.home');
+    // 🔹 Dashboard
+    Route::get('/', [AdminHomeController::class, 'index'])->name('admin.home');
 
+    // 🔹 Roles
+    Route::prefix('roles')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::post('/store', [RoleController::class, 'store'])->name('roles.store');
+        Route::get('/{id}', [RoleController::class, 'show'])->name('roles.show');
+        Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::post('/{id}/update', [RoleController::class, 'update'])->name('roles.update');
+        Route::get('/{id}/delete', [RoleController::class, 'delete'])->name('roles.delete');
+        Route::get('/{id}/permissions', [RoleController::class, 'permissions'])->name('roles.permissions');
+        Route::post('/{id}/permissions-update', [RoleController::class, 'permissionsUpdate'])->name('roles.permissions.update');
+    });
 
+    // 🔹 Users
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index');
+        Route::get('/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/store', [UserController::class, 'store'])->name('users.store');
+        Route::get('/{id}', [UserController::class, 'show'])->name('users.show');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::post('/{id}/update', [UserController::class, 'update'])->name('users.update');
+        Route::get('/{id}/delete', [UserController::class, 'delete'])->name('users.delete');
+    });
 
-    //-------role and permission routes
+    // 🔹 Permissions
+    Route::prefix('permissions')->middleware(IsDeveloper::class)->group(function () {
+        Route::get('/', [PermissionController::class, 'index'])->name('permissions.index');
+        Route::get('/create', [PermissionController::class, 'create'])->name('permissions.create');
+        Route::post('/store', [PermissionController::class, 'store'])->name('permissions.store');
+        Route::get('/{id}', [PermissionController::class, 'show'])->name('permissions.show');
+        Route::get('/{id}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
+        Route::post('/{id}/update', [PermissionController::class, 'update'])->name('permissions.update');
+        Route::get('/{id}/delete', [PermissionController::class, 'delete'])->name('permissions.delete');
+    });
 
-Route::get('/roles-list', [App\Http\Controllers\Backends\RoleController::class, 'index'])->name('roles.index');
-Route::get('/roles-create', [App\Http\Controllers\Backends\RoleController::class, 'create'])->name('roles.create');
-Route::post('/roles-store', [App\Http\Controllers\Backends\RoleController::class, 'store'])->name('roles.store');
-Route::get('/roles-show/{id}', [App\Http\Controllers\Backends\RoleController::class, 'show'])->name('roles.show');
-Route::get('/roles-edit/{id}', [App\Http\Controllers\Backends\RoleController::class, 'edit'])->name('roles.edit');
-Route::post('/roles-update/{id}', [App\Http\Controllers\Backends\RoleController::class, 'update'])->name('roles.update');
-Route::get('/roles-delete/{id}', [App\Http\Controllers\Backends\RoleController::class, 'delete'])->name('roles.delete');
+    // 🔹 Books (Admin)
+    Route::prefix('books')->group(function () {
+        Route::get('/', [AdminBookController::class, 'index'])->name('books.index');
+        Route::get('/create', [AdminBookController::class, 'create'])->name('books.create');
+        Route::post('/store', [AdminBookController::class, 'store'])->name('books.store');
+        Route::get('/{id}', [AdminBookController::class, 'show'])->name('books.show');
+        Route::get('/{id}/edit', [AdminBookController::class, 'edit'])->name('books.edit');
+        Route::post('/{id}/update', [AdminBookController::class, 'update'])->name('books.update');
+        Route::get('/{id}/delete', [AdminBookController::class, 'delete'])->name('books.delete');
+    });
 
-    //----------permission routes
-Route::get('/roles/{id}/permissions', [App\Http\Controllers\Backends\RoleController::class, 'permissions'])->name('roles.permissions');
-Route::get('/roles/{id}/permissions-update', [App\Http\Controllers\Backends\RoleController::class, 'permissionsUpdate'])->name('roles.permissions.update');
+    // 🔹 Categories
+    Route::prefix('categories')->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('categorys.index');
+        Route::get('/create', [CategoryController::class, 'create'])->name('categorys.create');
+        Route::post('/store', [CategoryController::class, 'store'])->name('categorys.store');
+        Route::get('/{id}', [CategoryController::class, 'show'])->name('categorys.show');
+        Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('categorys.edit');
+        Route::post('/{id}/update', [CategoryController::class, 'update'])->name('categorys.update');
+        Route::get('/{id}/delete', [CategoryController::class, 'delete'])->name('categorys.delete');
+    });
 
-
-//----------user routes
-Route::get('/users-list', [App\Http\Controllers\Backends\UserController::class, 'index'])->name('users.index');
-Route::get('/users-create', [App\Http\Controllers\Backends\UserController::class, 'create'])->name('users.create');
-Route::post('/users-store', [App\Http\Controllers\Backends\UserController::class, 'store'])->name('users.store');
-Route::get('/users-show/{id}', [App\Http\Controllers\Backends\UserController::class, 'show'])->name('users.show');
-Route::get('/users-edit/{id}', [App\Http\Controllers\Backends\UserController::class, 'edit'])->name('users.edit');
-Route::post('/users-update/{id}', [App\Http\Controllers\Backends\UserController::class, 'update'])->name('users.update');
-Route::get('/users-delete/{id}', [App\Http\Controllers\Backends\UserController::class, 'delete'])->name('users.delete');
-
-//----------permission routes
-Route::get('/permissions-list', [App\Http\Controllers\Backends\PermissionController::class, 'index'])->name('permissions.index')->middleware(IsDeveloper::class);
-Route::get('/permissions-create', [App\Http\Controllers\Backends\PermissionController::class, 'create'])->name('permissions.create')->middleware(IsDeveloper::class);
-Route::post('/permissions-store', [App\Http\Controllers\Backends\PermissionController::class, 'store'])->name('permissions.store')->middleware(IsDeveloper::class);
-Route::get('/permissions-show/{id}', [App\Http\Controllers\Backends\PermissionController::class, 'show'])->name('permissions.show')->middleware(IsDeveloper::class);
-Route::get('/permissions-edit/{id}', [App\Http\Controllers\Backends\PermissionController::class, 'edit'])->name('permissions.edit')->middleware(IsDeveloper::class);
-Route::post('/permissions-update/{id}', [App\Http\Controllers\Backends\PermissionController::class, 'update'])->name('permissions.update')->middleware(IsDeveloper::class);
-Route::get('/permissions-delete/{id}', [App\Http\Controllers\Backends\PermissionController::class, 'delete'])->name('permissions.delete')->middleware(IsDeveloper::class);
-
-
-//----------book routes
-Route::get('/books-list', [App\Http\Controllers\Backends\BookController::class, 'index'])->name('books.index');
-Route::get('/books-create', [App\Http\Controllers\Backends\BookController::class, 'create'])->name('books.create');
-Route::post('/books-store', [App\Http\Controllers\Backends\BookController::class, 'store'])->name('books.store');
-Route::get('/books-show/{id}', [App\Http\Controllers\Backends\BookController::class, 'show'])->name('books.show');
-Route::get('/books-edit/{id}', [App\Http\Controllers\Backends\BookController::class, 'edit'])->name('books.edit');
-Route::post('/books-update/{id}', [App\Http\Controllers\Backends\BookController::class, 'update'])->name('books.update');
-Route::get('/books-delete/{id}', [App\Http\Controllers\Backends\BookController::class, 'delete'])->name('books.delete');
-
-
-//----------category routes
-Route::get('/categorys-list', [App\Http\Controllers\Backends\CategoryController::class, 'index'])->name('categorys.index');
-Route::get('/categorys-create', [App\Http\Controllers\Backends\CategoryController::class, 'create'])->name('categorys.create');
-Route::post('/categorys-store', [App\Http\Controllers\Backends\CategoryController::class, 'store'])->name('categorys.store');
-Route::get('/categorys-show/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'show'])->name('categorys.show');
-Route::get('/categorys-edit/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'edit'])->name('categorys.edit');
-Route::post('/categorys-update/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'update'])->name('categorys.update');
-Route::get('/categorys-delete/{id}', [App\Http\Controllers\Backends\CategoryController::class, 'delete'])->name('categorys.delete');
-
-
-
-
-//no permission
-Route::get('/admin.no_permission', function () {
-    return view('backends.no_permission');
-})->name('admin.no_permission');
+    // 🔹 No permission page
+    Route::get('/no_permission', function () {
+        return view('backends.no_permission');
+    })->name('admin.no_permission');
 
 });
 
 
-
-
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\Frontends\BookController::class, 'index'])->name('home');
 
-
+/*
+|--------------------------------------------------------------------------
+| Fallback Route
+|--------------------------------------------------------------------------
+*/
 Route::fallback(function () {
-    redirect()->route('admin.home');
+    return redirect()->route('admin.home');
 });
