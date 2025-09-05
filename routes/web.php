@@ -30,6 +30,11 @@ Route::get('/category/{id}', [FrontendBookController::class, 'category'])->name(
 // Single book modal (AJAX modal)
 Route::get('/book/{id}/modal', [FrontendBookController::class, 'showModal'])->name('frontends.books.modal');
 
+Route::get('/book/{id}/view-pdf', [FrontendBookController::class, 'viewPdf'])
+    ->name('books.viewPdf')
+    ->middleware('auth'); // force login before view
+
+
 
 /*
 |--------------------------------------------------------------------------

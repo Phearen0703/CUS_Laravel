@@ -28,9 +28,29 @@ class BookController extends Controller
     // Book Modal
     public function showModal(string $id)
     {
-        // Eager load the category relationship to prevent the 500 error
         $book = Book::with('category')->findOrFail($id);
 
-        return view('backends.books.book-modal', compact('book'));
+        // point to frontends folder instead of backends
+        return view('frontends.books.book-modal', compact('book'));
     }
+    public function viewPdf($id)
+    {
+        $book = Book::findOrFail($id);
+
+        // Check if PDF exists
+        if (!$book->pdf) {
+            return redirect()->back()->with('error', 'No PDF available for this book.');
+        }
+
+        $path = storage_path('app/public/' . $book->pdf);
+
+        if (!file_exists($path)) {
+            return redirect()->back()->with('error', 'PDF file not found on server.');
+        }
+
+        // Stream PDF file to browser
+        return response()->file($path);
+    }
+
+
 }
