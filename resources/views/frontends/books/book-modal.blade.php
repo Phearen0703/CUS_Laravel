@@ -15,7 +15,7 @@
             @if($book->pdf)
                 <a href="{{ route('books.viewPdf', $book->id) }}" 
                 class="btn btn-success">
-                📖 View PDF
+                View PDF
                 </a>
             @else
                 <button class="btn btn-secondary" disabled>

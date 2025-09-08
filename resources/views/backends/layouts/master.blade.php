@@ -310,6 +310,8 @@
     <script src="{{asset("backends/assets/libs/jsvectormap/maps/world.js")}}"></script>
     <script src="{{asset("backends/assets/js/pages/index.init.js")}}"></script>
     <script src="{{asset("backends/assets/js/app.js")}}"></script>
+
+    
     @stack('js')
 </body>
 <!--end body-->

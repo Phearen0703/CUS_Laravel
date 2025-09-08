@@ -28,32 +28,28 @@
                 </thead>
                 <tbody>
                     @php $i = 1; @endphp
-                    @foreach ($role_permission as $permission)
-                        <tr>
-                            <td>
-                                {{ $i++ }}
-                            </td>
-                            <td>
-                                {{ $permission->name }}
-                            </td>
-                            <td>
-                                <input onclick="handlePermission('list', {{ $permission->role_permission_id }}, {{ $permission->list }}, {{ $permission->id }})"
-                                    type="checkbox" value="{{ $permission->list }}" {{ $permission->list == 1 ? 'checked' : '' }}>
-                            </td>
-                            <td>
-                                <input onclick="handlePermission('store', {{ $permission->role_permission_id }}, {{ $permission->store }}, {{ $permission->id }})"
-                                    type="checkbox" value="{{ $permission->store }}" {{ $permission->store == 1 ? 'checked' : '' }}>
-                            </td>
-                            <td>
-                                <input onclick="handlePermission('edit', {{ $permission->role_permission_id }}, {{ $permission->edit }}, {{ $permission->id }})"
-                                    type="checkbox" value="{{ $permission->edit }}" {{ $permission->edit == 1 ? 'checked' : '' }}>
-                            </td>
-                            <td>
-                                <input onclick="handlePermission('remove', {{ $permission->role_permission_id }}, {{ $permission->remove }}, {{ $permission->id }})"
-                                    type="checkbox" value="{{ $permission->remove }}" {{ $permission->remove == 1 ? 'checked' : '' }}>
-                            </td>
-                        </tr>
-                    @endforeach
+                        @foreach ($role_permission as $permission)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td> {{-- Use $loop->iteration instead of $i++ --}}
+                                <td>{{ $permission->name }}</td>
+                                <td>
+                                    <input onclick="handlePermission('list', {{ $permission->role_permission_id }}, {{ $permission->list }}, {{ $permission->id }}, this)"
+                                        type="checkbox" value="{{ $permission->list }}" {{ $permission->list == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td>
+                                    <input onclick="handlePermission('store', {{ $permission->role_permission_id }}, {{ $permission->store }}, {{ $permission->id }}, this)"
+                                        type="checkbox" value="{{ $permission->store }}" {{ $permission->store == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td>
+                                    <input onclick="handlePermission('edit', {{ $permission->role_permission_id }}, {{ $permission->edit }}, {{ $permission->id }}, this)"
+                                        type="checkbox" value="{{ $permission->edit }}" {{ $permission->edit == 1 ? 'checked' : '' }}>
+                                </td>
+                                <td>
+                                    <input onclick="handlePermission('remove', {{ $permission->role_permission_id }}, {{ $permission->remove }}, {{ $permission->id }}, this)"
+                                        type="checkbox" value="{{ $permission->remove }}" {{ $permission->remove == 1 ? 'checked' : '' }}>
+                                </td>
+                            </tr>
+                        @endforeach
 
 
                     
@@ -64,8 +60,8 @@
 
 @endsection
 
-@push('js')
-
+{{-- @push('js')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
     const roleId = {{ $id }};
@@ -83,6 +79,39 @@
     }
 </script>
 
+@endpush --}}
 
+@push('js')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    const roleId = {{ $id }};
 
+    function handlePermission(permission, role_permission_id, role_permission_value, permission_id, checkboxElement) {
+        let url = "{{ url('admin/roles') }}/" + roleId + "/permissions-update";
+        let newValue = checkboxElement.checked ? 1 : 0;
+
+        $.ajax({
+            url: url,
+            type: "POST", // Use POST for updates, which is more secure and correct
+            data: {
+                _token: "{{ csrf_token() }}", // Include CSRF token for security
+                permission: permission,
+                role_permission_id: role_permission_id,
+                role_permission_value: newValue,
+                permission_id: permission_id
+            },
+            success: function(response) {
+                // The update was successful. No page redirect.
+                // You can add a success message here if you want
+                console.log("Permission updated successfully!");
+            },
+            error: function(xhr) {
+                // If the request fails, revert the checkbox state
+                checkboxElement.checked = !checkboxElement.checked;
+                console.error("Failed to update permission:", xhr.responseText);
+                alert("Failed to update permission.");
+            }
+        });
+    }
+</script>
 @endpush

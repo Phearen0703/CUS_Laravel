@@ -37,20 +37,20 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
 
-        // Check if PDF exists
         if (!$book->pdf) {
             return redirect()->back()->with('error', 'No PDF available for this book.');
         }
 
-        $path = storage_path('app/public/' . $book->pdf);
+        $path = public_path('pdf/books/' . $book->pdf);
 
         if (!file_exists($path)) {
             return redirect()->back()->with('error', 'PDF file not found on server.');
         }
 
-        // Stream PDF file to browser
         return response()->file($path);
     }
+
+
 
 
 }
