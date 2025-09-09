@@ -63,43 +63,7 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">NewsPortal</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Categories
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Politics</a></li>
-                            <li><a class="dropdown-item" href="#">Business</a></li>
-                            <li><a class="dropdown-item" href="#">Technology</a></li>
-                            <li><a class="dropdown-item" href="#">Sports</a></li>
-                            <li><a class="dropdown-item" href="#">Entertainment</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search...">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
-            </div>
-        </div>
-    </nav>
+    @yield('nav')
 
     <!-- Hero Slider with Auto-Play -->
     <div id="heroSlider" class="carousel slide carousel-fade mb-4" data-bs-ride="carousel" data-bs-interval="3000">
@@ -160,66 +124,9 @@
                 
 
                 <!-- Recent News Widget -->
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Recent News</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">New Economic Policy Announced</h6>
-                                    <small>1 hour ago</small>
-                                </div>
-                                <small class="text-muted">Politics</small>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Tech Giant Reports Record Profits</h6>
-                                    <small>3 hours ago</small>
-                                </div>
-                                <small class="text-muted">Business</small>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Championship Finals This Weekend</h6>
-                                    <small>5 hours ago</small>
-                                </div>
-                                <small class="text-muted">Sports</small>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">New Streaming Series Breaks Records</h6>
-                                    <small>7 hours ago</small>
-                                </div>
-                                <small class="text-muted">Entertainment</small>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Breakthrough in Cancer Research</h6>
-                                    <small>9 hours ago</small>
-                                </div>
-                                <small class="text-muted">Health</small>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                @yield('recent_news')
 
-                <!-- Newsletter Widget -->
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Newsletter</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>Subscribe to our newsletter for daily updates</p>
-                        <form>
-                            <div class="mb-3">
-                                <input type="email" class="form-control" placeholder="Your Email">
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Subscribe</button>
-                        </form>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

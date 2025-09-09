@@ -12,9 +12,11 @@ class BookController extends Controller
     // Home Page (all categories with limited books)
     public function index()
     {
-        $categories = Category::with('books')->get();
+        $categories = Category::withCount('books')->get();
+        $recentBooks = Book::latest()->take(5)->get();
 
-    return view('frontends.index', compact('categories'));
+
+    return view('frontends.index', compact('categories', 'recentBooks'));
     }
 
 
@@ -24,6 +26,32 @@ class BookController extends Controller
         $category = Category::with('books')->findOrFail($id);
         return view('frontends.category.show', compact('category'));
     }
+    // Search books by title or code
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $categoryId = $request->input('category');
+
+        $books = Book::query()
+            ->when($query, function($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                ->orWhere('code', 'LIKE', "%{$query}%");
+            })
+            ->when($categoryId, function($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
+            })
+            ->with('category')
+            ->get();
+
+        $categories = Category::withCount('books')->get();
+        $recentBooks = Book::latest()->take(5)->get();
+
+        return view('frontends.index', compact('books', 'categories', 'recentBooks', 'query', 'categoryId'));
+    }
+
+
+
+
 
     // Book Modal
     public function showModal(string $id)

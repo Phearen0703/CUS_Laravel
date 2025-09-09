@@ -31,7 +31,7 @@ class BookController extends Controller
                 'category.name as category'
             );
 
-        // 🔍 Search by code or title
+        //  Search by code or title
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -40,7 +40,7 @@ class BookController extends Controller
             });
         }
 
-        // 📂 Filter by type (book / ebook)
+        //  Filter by type (book / ebook)
         if ($request->filled('type')) {
             if ($request->type == 'book') {
                 $query->whereNotNull('books.image');

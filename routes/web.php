@@ -32,6 +32,8 @@ Route::get('/book/{id}/modal', [FrontendBookController::class, 'showModal'])->na
 
 // web.php
 Route::get('/books/{id}/pdf', [FrontendBookController::class, 'viewPdf'])->name('books.viewPdf');
+// Search books by title or code
+Route::get('/books/search', [FrontendBookController::class, 'search'])->name('books.search');
 
 
 
