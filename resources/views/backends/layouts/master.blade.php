@@ -200,31 +200,6 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#sidebarOperation" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarOperation">
-                                <i class="fa-brands fa-windows menu-icon"></i>
-                                <span>Operations</span>
-                            </a>
-                            <div class="collapse " id="sidebarOperation">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-
-                                        @if (checkPermission('key_user', 'view'))
-                                            <a href="{{route('users.index')}}" class="nav-link"><span>User</span></a>
-                                        @endif
-                                        
-                                        @if (checkPermission('key_role', 'view'))
-                                            <a href="{{route('roles.index')}}" class="nav-link"><span>Roles</span></a>
-                                        
-                                        @endif
-                                        
-                                    </li><!--end nav-item-->
-                                    
-                                </ul><!--end nav-->
-                            </div><!--end startbarUsers-->
-                        </li><!--end nav-item-->
-
-                        <li class="nav-item">
                             <a class="nav-link" href="#sidebarUsers" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarUsers">
                                 <i class="iconoir-view-grid menu-icon"></i>

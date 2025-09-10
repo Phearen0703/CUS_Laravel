@@ -2,40 +2,49 @@
 
 @section('nav')
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">NewsPortal</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            Categories
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Politics</a></li>
-                            <li><a class="dropdown-item" href="#">Business</a></li>
-                            <li><a class="dropdown-item" href="#">Technology</a></li>
-                            <li><a class="dropdown-item" href="#">Sports</a></li>
-                            <li><a class="dropdown-item" href="#">Entertainment</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="d-flex" action="{{ route('books.search') }}" method="GET">
-                    <input class="form-control me-2" type="search" name="query"
-                        placeholder="Search by title or code"
-                                    name="search"
-                                    value="{{ request('search') }}">
-                    <button class="btn btn-outline-light" type="submit">Search</button>
-                </form>
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ route('books.index') }}">Library</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('books.index') ? 'active' : '' }}" 
+                       href="{{ route('home') }}">
+                        Home
+                    </a>
+                </li>
+
+                <!-- Dynamic Categories Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        Categories
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach($categories as $category)
+                            <li>
+                                <a class="dropdown-item" href="{{ route('home', ['category' => $category->id]) }}">
+                                    {{ $category->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Search Form -->
+            <form class="d-flex" action="{{ route('books.search') }}" method="GET">
+                <input class="form-control me-2" type="search" name="query"
+                       placeholder="Search by title or code"
+                       value="{{ request('query') }}">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
         </div>
-    </nav>
+    </div>
+</nav>
+
 
 @endsection
 @section('content')

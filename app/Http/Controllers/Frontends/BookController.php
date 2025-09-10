@@ -10,57 +10,65 @@ use App\Models\Category;
 class BookController extends Controller
 {
     // Home Page (all categories with limited books)
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::withCount('books')->get();
         $recentBooks = Book::latest()->take(5)->get();
 
+        $query = Book::query();
 
-    return view('frontends.index', compact('categories', 'recentBooks'));
+        if ($request->filled('search')) {
+            $s = $request->input('search');
+            $query->where(function($q) use ($s) {
+                $q->where('title', 'like', "%{$s}%")
+                  ->orWhere('code', 'like', "%{$s}%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->input('category'));
+        }
+
+        $books = $query->latest()->paginate(12)->withQueryString();
+
+        return view('frontends.index', compact('categories', 'recentBooks', 'books'));
     }
 
-
-    // Category Page
-    public function category($id)
-    {
-        $category = Category::with('books')->findOrFail($id);
-        return view('frontends.category.show', compact('category'));
-    }
-    // Search books by title or code
+    // 🔍 Search Page
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $categoryId = $request->input('category');
 
-        $books = Book::query()
-            ->when($query, function($q) use ($query) {
-                $q->where('title', 'LIKE', "%{$query}%")
-                ->orWhere('code', 'LIKE', "%{$query}%");
-            })
-            ->when($categoryId, function($q) use ($categoryId) {
-                $q->where('category_id', $categoryId);
-            })
-            ->with('category')
-            ->get();
+        $books = Book::where('title', 'LIKE', "%{$query}%")
+                    ->orWhere('code', 'LIKE', "%{$query}%")
+                    ->paginate(10);
 
         $categories = Category::withCount('books')->get();
-        $recentBooks = Book::latest()->take(5)->get();
+        $recentBooks = Book::latest()->take(5)->get(); // ✅ add this
 
-        return view('frontends.index', compact('books', 'categories', 'recentBooks', 'query', 'categoryId'));
+        return view('frontends.index', compact('books', 'categories', 'recentBooks'))
+            ->with('search', $query);
     }
 
+    // 📂 Category Page
+    public function category($id)
+    {
+        $category = Category::with('books')->findOrFail($id);
 
+        $categories = Category::withCount('books')->get();
+        $recentBooks = Book::latest()->take(5)->get(); // ✅ add this
 
+        return view('frontends.category.show', compact('category', 'categories', 'recentBooks'));
+    }
 
-
-    // Book Modal
+    // 📖 Book Modal
     public function showModal(string $id)
     {
         $book = Book::with('category')->findOrFail($id);
-
-        // point to frontends folder instead of backends
         return view('frontends.books.book-modal', compact('book'));
     }
+
+    // 📑 View PDF
     public function viewPdf($id)
     {
         $book = Book::findOrFail($id);
@@ -77,8 +85,4 @@ class BookController extends Controller
 
         return response()->file($path);
     }
-
-
-
-
 }
